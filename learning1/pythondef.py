@@ -1,4 +1,4 @@
-def printEntry():
+sdef printEntry():
 	print "entery 1"
 	print "entery 2"
 
