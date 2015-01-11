@@ -36,12 +36,12 @@ def not_bad(s):
   # +++your code here+++
   words = s.split(' ')
   newwords=''
-  st=0; en=0
+  st=-1; en=-1
   for i in range(len(words)):
     if words[i] == 'not': st = i
     if 'bad' in  words[i]: en =i
     # print '===',st,en
-  if en > st :
+  if en > st  and st != -1:
       newwords = words[0:st] + [words[en].replace('bad','good')]
       if len(words) > en:
         newwords = newwords + words[en+1:]
