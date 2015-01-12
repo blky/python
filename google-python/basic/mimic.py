@@ -68,7 +68,7 @@ def mimic_dict(filename):
     else:
         mimicDict[allwords[i]] = [allwords[i+1]]
 
-  print 'all keys --->',sorted(mimicDict.keys())
+  # print 'all keys --->',sorted(mimicDict.keys())
   return mimicDict
  
 def print_mimic(mimic_dict, word):
@@ -78,10 +78,14 @@ def print_mimic(mimic_dict, word):
   #   print key,mimic_dict[key]
   newarticle=[]
   if word == '' : word = 'Alice'
+  if word not in mimic_dict.keys(): 
+    print 'not used in this article, please select other word'
+    exit()
+
   newarticle.append(word)
 
   for ct in range(200):
- 
+    
     nextword = mimic_dict[word][random.randint(0,len(mimic_dict[word])-1)]
     # print ct,'nextword is ===> ',nextword,'total length =>',len(mimic_dict[word]),'random => ',random.randint(0,len(mimic_dict[word])-1)
     newarticle.append(nextword)
@@ -96,12 +100,15 @@ def print_mimic(mimic_dict, word):
 
 # Provided main(), calls mimic_dict() and mimic()
 def main():
-  if len(sys.argv) != 2:
-    print 'usage: ./mimic.py file-to-read'
+  if len(sys.argv) < 2:
+    print 'usage: ./mimic.py file-to-read word'
     sys.exit(1)
 
   dict = mimic_dict(sys.argv[1])
-  print_mimic(dict, '')
+  word = 'Alice'
+  if len(sys.argv) == 3: word = sys.argv[2]
+
+  print_mimic(dict, word)
 
 
 if __name__ == '__main__':
