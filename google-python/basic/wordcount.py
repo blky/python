@@ -38,6 +38,9 @@ print_words() and print_top().
 """
 
 import sys
+import operator
+
+text={}
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -49,6 +52,30 @@ import sys
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
+def readIntoDict(filename):
+  f = open(filename,'rU')
+  for line in f:
+    words = line.split()
+    for word in words:
+      if word in text.keys():
+        text[word] +=1
+      else:
+        text[word] = 1
+
+def print_words(filename):
+  readIntoDict(filename)
+  for key in sorted(text.keys()):
+    print key,text[key]
+  
+def print_top(filename):
+  readIntoDict(filename)
+  ct = 0
+  # for item in sorted(text.items,key=text.items,reverse=True):
+  for item in sorted(text.items(),key=operator.itemgetter(1),reverse=True):
+    if ct > 10:exit(1)
+    print item[0],item[1]
+    ct +=1
+
 def main():
   if len(sys.argv) != 3:
     print 'usage: ./wordcount.py {--count | --topcount} file'

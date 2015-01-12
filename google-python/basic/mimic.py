@@ -48,12 +48,49 @@ import sys
 def mimic_dict(filename):
   """Returns mimic dict mapping each word to list of words which follow it."""
   # +++your code here+++
-  return
+  mimicDict = {}
+  allwords = []
 
+  f = open(filename,'rU')
+  for line in f:
+    words = line.split()
+    for word in words:
+      allwords.append(word)
+  print len(allwords)
 
+  for i in range(len(allwords)-1):
+    if allwords[i] in mimicDict.keys():
+      # print words[i],'---yes, already has key'
+
+      if allwords[i+1] not in mimicDict[allwords[i]]:
+        mimicDict[allwords[i]].append(allwords[i+1])
+        # print allwords[i+1],'next word add','all->',mimicDict[allwords[i]]
+    else:
+        mimicDict[allwords[i]] = [allwords[i+1]]
+
+  print 'all keys --->',sorted(mimicDict.keys())
+  return mimicDict
+ 
 def print_mimic(mimic_dict, word):
   """Given mimic dict and start word, prints 200 random words."""
-  # +++your code here+++
+  # # +++your code here+++
+  # for key in mimic_dict.keys():
+  #   print key,mimic_dict[key]
+  newarticle=[]
+  if word == '' : word = 'Alice'
+  newarticle.append(word)
+
+  for ct in range(200):
+ 
+    nextword = mimic_dict[word][random.randint(0,len(mimic_dict[word])-1)]
+    # print ct,'nextword is ===> ',nextword,'total length =>',len(mimic_dict[word]),'random => ',random.randint(0,len(mimic_dict[word])-1)
+    newarticle.append(nextword)
+    word = nextword
+    ct +=1
+    print ct,nextword
+
+  print ' '.join(newarticle)
+
   return
 
 
