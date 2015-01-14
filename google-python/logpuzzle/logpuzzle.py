@@ -10,6 +10,7 @@ import os
 import re
 import sys
 import urllib
+import commands
 
 """Logpuzzle exercise
 Given an apache logfile, find the puzzle urls and download the images.
@@ -17,7 +18,13 @@ Given an apache logfile, find the puzzle urls and download the images.
 Here's what a puzzle url looks like:
 10.254.254.28 - - [06/Aug/2007:00:13:48 -0700] "GET /~foo/puzzle-bar-aaab.jpg HTTP/1.0" 302 528 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6"
 """
-
+def url_sort_key(url):
+  """Used to order the urls in increasing order by 2nd word if present."""
+  match = re.search(r'-(\w+)-(\w+)\.\w+', url)
+  if match:
+    return match.group(2)
+  else:
+    return url
 
 def read_urls(filename):
   """Returns a list of the puzzle urls from the given log file,
@@ -25,6 +32,17 @@ def read_urls(filename):
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
+  text = open(filename,'rU').read()
+  matches = re.findall('GET (/[\S]*puzzle[\S]*)',text)
+
+  returnMatch =[]
+  for item in matches:
+    if not item in returnMatch:
+      returnMatch.append(item)
+  # print '\n'.join(sorted(returnMatch))
+  # return sorted(returnMatch)
+  return sorted(returnMatch, key=url_sort_key)
+
   
 
 def download_images(img_urls, dest_dir):
@@ -36,7 +54,34 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   # +++your code here+++
+
+  abpath = os.path.abspath(dest_dir)
+  cmd = 'mkdir ' + abpath
+
+  # print cmd
+  (status,output) = commands.getstatusoutput(cmd)
   
+  indexfile = open(abpath + '/index.html', 'w')
+  indexfile.write('<html><body>\n')
+
+
+
+   # if not os.path.exists(dest_dir):
+   #  os.makedirs(dest_dir)
+
+  i = 0
+  for url in img_urls:
+    local_name = 'img%d.jpg' % i
+    imgName = abpath+'/'+local_name
+    indexfile.write('<img src="%s">' % (local_name,))
+    # print imgName
+    imgURL = 'http://code.google.com' + url
+    print 'retrieving ...' , imgURL
+    i+=1
+    urllib.urlretrieve(imgURL,imgName)
+
+  indexfile.write('\n</body></html>\n')
+
 
 def main():
   args = sys.argv[1:]
@@ -56,6 +101,8 @@ def main():
     download_images(img_urls, todir)
   else:
     print '\n'.join(img_urls)
+    # print '======'
+
 
 if __name__ == '__main__':
   main()
