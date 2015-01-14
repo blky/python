@@ -41,8 +41,34 @@ def extract_names(filename):
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
   # +++your code here+++
-  return
+  f = open(filename,'rU')
+  allcontents = f.read()
+  allsummary=[]
 
+  matchTitle = re.search('Popularity in (\d\d\d\d)',allcontents)
+  # print matchTitle.group()
+  title = matchTitle.group()
+  year = matchTitle.group(1)
+
+  matchRank = re.findall('<tr align="right"><td>([\d]+)</td><td>([\w]+)</td><td>([\w]+)',allcontents)
+  for line in matchRank:
+    # print line[0],line[1],line[2]
+
+    allsummary.append((year,line[0],line[1]))
+    allsummary.append ((year, line[0],line[2]))
+
+
+  contentlists=[]
+  for record in sorted(allsummary,key=secondItem):
+    # print 'record is ' ,record
+    line = record[0]+ ' '+ record[1] + ' ' + record[2]
+    contentLists = contentlists.append(line) 
+  
+  return  title +'\n' + '\n'.join(contentlists)
+
+
+def secondItem(items):
+  return items[1]
 
 def main():
   # This command-line parsing code is provided.
@@ -63,6 +89,20 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
-  
+  for filename in args:
+    summaryContent = extract_names(filename)
+
+    if summary: 
+      print 'write to file'
+      fn = filename + '.summary'
+      fw = open(fn,'w')
+      fw.write(summaryContent + '\n')
+      fw.close 
+    else: 
+      print   summaryContent
+
+
+
+
 if __name__ == '__main__':
   main()

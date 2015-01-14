@@ -61,6 +61,7 @@ def readIntoDict(filename):
         text[word] +=1
       else:
         text[word] = 1
+  f.close()
 
 def print_words(filename):
   readIntoDict(filename)

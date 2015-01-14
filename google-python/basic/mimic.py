@@ -80,8 +80,7 @@ def print_mimic(mimic_dict, word):
   if word == '' : word = 'Alice'
   if word not in mimic_dict.keys(): 
     print 'not used in this article, please select other word'
-    exit()
-
+    sys.exit()
   newarticle.append(word)
 
   for ct in range(200):
