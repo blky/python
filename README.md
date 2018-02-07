@@ -1,3 +1,3 @@
 # python and data 
 
-https://github.com/blky/JSProject/wiki/course-online-list
+https://www.coursera.org/learn/python-data-analysis/lecture/wPUOQ/data-science
